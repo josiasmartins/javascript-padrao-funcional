@@ -1,6 +1,7 @@
 import { handlerStatus } from '../utils/promise-helpers.js';
+import { partialize } from '../utils/operations.js';
 
-const API = 'http://localhost:3000/notas';
+const API = 'http://localhost:3000/notass';
 
 const getItemsFromNotas = notas => notas.$flatMap(nota => nota.itens);
 const filterItemsByCode = (code, items) => items.filter(item => item.codigo == code);
@@ -15,10 +16,22 @@ export const notasService = {
 
     listAll() {
         
-        return fetch(API).then(handlerStatus)
+        return fetch(API)
+            .then(handlerStatus)
+            .catch(err => {
+                console.log(err);
+                return Promise.reject('Não foi possível obter as notas fiscais')
+            })
     },
 
     sumItems(code) {
-        return this.listAll().then(sumItems(code));
+        // const filterItems = filterItemsByCode.bind(null, code);
+        const filterItems = partialize(filterItemsByCode, code);
+        return this.listAll()
+            .then(notas => sumItemsValue(
+                filterItems(
+                    getItemsFromNotas(notas)
+                )
+            ));
     }
 }

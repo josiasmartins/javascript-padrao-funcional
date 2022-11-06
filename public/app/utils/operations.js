@@ -1,0 +1,2 @@
+// método para receber somente um parametro
+export const partialize = (fn, ...args) => fn.bind(null, ...args);
