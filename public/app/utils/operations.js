@@ -11,5 +11,26 @@ export const pipe = (...fns) => value =>
     fns.reduce((previousValue, fn) => 
         fn(previousValue), value);
 
+/**
+ * método para setar a quantidades de vezes que a função será executada
+ * @param {*} times quantidades de vezes chamado
+ * @param {*} fn função
+ * @returns retorna a função
+ */
 export const takeUtil = (times, fn) => 
     () => times-- > 0 && fn();
+
+/**
+ *  método para setar um tempo antes de ser chamado novamente
+ * 
+ * @param {*} milliseconds tempo de espera
+ * @param {*} fn função
+ * @returns retorna a função passada (fn)
+ */
+export const debounceTime = (milliseconds, fn) => {
+    let time = 0;
+    return () => {
+        clearTimeout(time);
+        time = setTimeout(fn, milliseconds);
+    }
+}
