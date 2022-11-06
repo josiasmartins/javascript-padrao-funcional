@@ -18,6 +18,10 @@ export const notasService = {
         
         return fetch(API)
             .then(handlerStatus)
+            .then(notas => {
+                if (notas) return notas;
+                return [];
+            })
             .catch(err => {
                 console.log(err);
                 return Promise.reject('Não foi possível obter as notas fiscais')
