@@ -1,4 +1,9 @@
-// método para receber somente um parametro
+/**
+ * método que transforma funções que tem mais de um parametro em apenas um
+ * @param {*} fn função
+ * @param  {...any} args parametros
+ * @returns retorna a função com somente um parametro
+ */
 export const partialize = (fn, ...args) => fn.bind(null, ...args);
 
 export const compose = (...fns) => value => 
@@ -6,6 +11,11 @@ export const compose = (...fns) => value =>
     fns.reduceRight((previousValue, fn) => 
         fn(previousValue), value);
 
+/**
+ * realiza a composição das funcoes passada como parâmetro
+ * @param  {...any} fns 
+ * @returns retorna uma unica função
+ */
 export const pipe = (...fns) => value => 
     // reduceRigh: segundo parametro, valor incial
     fns.reduce((previousValue, fn) => 
