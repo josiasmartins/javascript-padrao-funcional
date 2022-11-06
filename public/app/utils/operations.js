@@ -1,2 +1,7 @@
 // método para receber somente um parametro
 export const partialize = (fn, ...args) => fn.bind(null, ...args);
+
+export const compose = (...fns) => value => 
+    // reduceRigh: segundo parametro, valor incial
+    fns.reduceRight((previousValue, fn) => 
+        fn(previousValue), value);
