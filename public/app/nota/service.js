@@ -1,11 +1,12 @@
 import { handlerStatus } from '../utils/promise-helpers.js';
 import { partialize, compose, pipe } from '../utils/operations.js';
+import { Maybe } from '../utils/maybe.js';
 
 const API = 'http://localhost:3000/notas';
 
-const getItemsFromNotas = notas => notas.$flatMap(nota => nota.itens);
-const filterItemsByCode = (code, items) => items.filter(item => item.codigo == code);
-const sumItemsValue = items => items.reduce((total, item) => total + item.valor, 0);
+const getItemsFromNotas = notasM => notasM.map(notas => notas.$flatMap(nota => nota.itens));
+const filterItemsByCode = (code, itemsM) => itemsM.map(items => items.filter(item => item.codigo == code));
+const sumItemsValue = itemsM => itemsM.map(items => items.reduce((total, item) => total + item.valor, 0));
 
 const sumItems = code => notas => notas
     .$flatMap(nota => nota.itens)
@@ -18,10 +19,7 @@ export const notasService = {
         
         return fetch(API)
             .then(handlerStatus)
-            .then(notas => {
-                if (notas) return notas;
-                return [];
-            })
+            .then(notas => Maybe.of(null))
             .catch(err => {
                 console.log(err);
                 return Promise.reject('Não foi possível obter as notas fiscais')
@@ -44,6 +42,7 @@ export const notasService = {
             //     )
             // ));
             // outra forma de fazer a composição
-            .then(sumItems);
+            .then(sumItems)
+            .then(result => result.getOrElse(0));
     }
 }
