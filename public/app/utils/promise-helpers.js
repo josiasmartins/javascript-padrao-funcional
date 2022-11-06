@@ -22,5 +22,15 @@ export const timeoutPromise = (milliseconds, promise) => {
 
 export const delay = milliseconds => data => 
     new Promise((resolve, reject) => 
-        setTimeout(() => resolve(data), milliseconds), 
-    )
+        setTimeout(() => resolve(data), milliseconds));
+
+export const retry = (retries, milliseconds, fn) => 
+    fn().catch(err => {
+        console.log(retries);
+        // recursão: é chamar a mesma função
+        return delay(milliseconds)().then(() => 
+            retries > 1
+                ? retry(--retries, milliseconds, fn)
+                : Promise.reject(err)
+        )
+    });        
