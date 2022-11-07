@@ -33,6 +33,13 @@ export class Maybe {
         return Maybe.of(fn(this._value));
     }
 
+    /**
+     * Retorna o valor embrulhado pela mônada. Porém, 
+     * se o método receber um valor, é este valor que será 
+     * retornado caso a mônada embrulhe um valor null ou undefined.
+     * @param {*} value 
+     * @returns 
+     */
     getOrElse(value) {
         if (this.isNothing()) return value;
         return this._value;
