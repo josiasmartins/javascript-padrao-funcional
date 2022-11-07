@@ -43,6 +43,6 @@ export const notasService = {
             // ));
             // outra forma de fazer a composição
             .then(sumItems)
-            .then(result => result.getOrElse(0));
+            .then(result => result.getOrElse(10));
     }
 }
